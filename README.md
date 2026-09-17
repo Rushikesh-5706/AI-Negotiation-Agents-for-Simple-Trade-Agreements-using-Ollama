@@ -50,8 +50,11 @@ flowchart TD
 git clone https://github.com/Rushikesh-5706/AI-Negotiation-Agents-for-Simple-Trade-Agreements-using-Ollama.git
 cd AI-Negotiation-Agents-for-Simple-Trade-Agreements-using-Ollama
 
-# 2. Copy the example env file
+# 2. Copy the example env file and create the empty log file
+# (the empty log file must exist on the host before docker compose up
+#  so the bind mount creates a file, not a directory)
 cp .env.example .env
+touch negotiation_log.json
 
 # 3. Build and start both services
 docker compose up --build
@@ -113,27 +116,27 @@ curl -s -X POST http://localhost:8000/negotiate \
   -d '{"issue": "Tariff reduction on technology products", "rounds": 2}' | python3 -m json.tool
 ```
 
-**Real response (captured output):**
+**Example response (illustrative — actual model output will vary run to run due to non-deterministic generation at temperature 0.2; schema and key names are stable):**
 
 ```json
 {
-  "rounds": [
-    {
-      "round": 1,
-      "usa_proposal": "The United States proposes a 15% reduction in tariffs on technology products, contingent on China strengthening its enforcement of intellectual property rights and reducing barriers to market access for US technology firms.",
-      "china_response": "China is willing to consider a phased reduction in technology tariffs, but only if the US reciprocates by easing restrictions on technology transfer and providing greater market access for Chinese agricultural exports in a balanced exchange."
-    },
-    {
-      "round": 2,
-      "usa_proposal": "We propose a mutual 10% tariff reduction on technology goods with a joint IP enforcement task force, and we remain open to discussing agricultural access on a separate track to keep the technology negotiations focused.",
-      "china_response": "China accepts the principle of a joint IP enforcement task force and a 10% tariff reduction, provided that technology transfer restrictions are addressed concurrently and a clear timeline for agricultural market access discussions is established."
+    "rounds": [
+        {
+            "round": 1,
+            "usa_proposal": "We propose a 50% reduction in tariffs on technology products, with a phase-in period of 12 months, and strengthen IP protection clauses by adding a provision for expedited dispute resolution mechanisms.",
+            "china_response": "We propose a 30% reduction in tariffs on technology products, with a phase-in period of 18 months, and strengthen IP protection clauses by adding a provision for expedited dispute resolution mechanisms, contingent upon the USA making significant concessions on market access for agricultural products, specifically a 20% reduction in tariffs on key Chinese agricultural exports."
+        },
+        {
+            "round": 2,
+            "usa_proposal": "We propose a 45% reduction in tariffs on technology products, with a phase-in period of 12 months, and strengthen IP protection clauses by adding a provision for expedited dispute resolution mechanisms, contingent upon China making a 10% reduction in tariffs on key US agricultural exports.",
+            "china_response": "We propose a 40% reduction in tariffs on technology products, with a phase-in period of 15 months, and strengthen IP protection clauses by adding a provision for expedited dispute resolution mechanisms, contingent upon the USA making a 15% reduction in tariffs on key Chinese agricultural exports, and providing a 5% reduction in tariffs on US agricultural exports."
+        }
+    ],
+    "outcome": {
+        "agreement_reached": false,
+        "final_terms": "No agreement reached on Tariff reduction on technology products; negotiations ended with a compromise score of 0.0.",
+        "compromise_score": 0.0
     }
-  ],
-  "outcome": {
-    "agreement_reached": true,
-    "final_terms": "Agreement reached on Tariff reduction on technology products with a compromise score of 0.72.",
-    "compromise_score": 0.72
-  }
 }
 ```
 

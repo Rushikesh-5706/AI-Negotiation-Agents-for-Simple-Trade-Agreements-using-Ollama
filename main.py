@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from agents.negotiator import Negotiator
 from scoring import calculate_compromise
@@ -46,7 +46,12 @@ _LOG_FILE = Path(__file__).parent / "negotiation_log.json"
 
 class NegotiateRequest(BaseModel):
     issue: str
-    rounds: int = 3
+    rounds: int = Field(
+        default=3,
+        gt=0,
+        le=10,
+        description="Number of negotiation rounds. Must be between 1 and 10.",
+    )
 
 
 @app.post("/negotiate")

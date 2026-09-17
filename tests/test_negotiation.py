@@ -200,3 +200,24 @@ def test_negotiation_log_created(clean_log_file):
     assert "rounds" in last_entry and "outcome" in last_entry, (
         f"Log entry missing 'rounds' or 'outcome': {last_entry.keys()}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Input validation
+# ---------------------------------------------------------------------------
+
+
+def test_negotiate_rejects_non_positive_rounds():
+    """
+    rounds <= 0 must be rejected with HTTP 422 (Pydantic Field gt=0 constraint),
+    not silently return HTTP 200 with an empty rounds list.
+    """
+    response = client.post("/negotiate", json={"issue": "Invalid rounds test", "rounds": 0})
+    assert response.status_code == 422, (
+        f"Expected 422 for rounds=0, got {response.status_code}"
+    )
+
+    response = client.post("/negotiate", json={"issue": "Invalid rounds test", "rounds": -1})
+    assert response.status_code == 422, (
+        f"Expected 422 for rounds=-1, got {response.status_code}"
+    )

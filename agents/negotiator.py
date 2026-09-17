@@ -128,7 +128,10 @@ class Negotiator:
             f"1. Think through your negotiation strategy, considering your priorities, "
             f"flexibility, and the history above.\n"
             f"2. Decide what concessions, if any, to offer, and what you need in return.\n"
-            f"3. Output ONLY your final proposal as 1-2 sentences. "
+            f"3. Your proposal MUST explicitly reference at least one of your stated "
+            f"priorities by name (e.g. mention 'tariffs', 'IP protection', "
+            f"'market access', or 'technology transfer' directly).\n"
+            f"4. Output ONLY your final proposal as 1-2 sentences. "
             f"Do NOT include labels like 'Proposal:', 'Response:', reasoning steps, "
             f"or any preamble. Begin directly with the proposal text.\n"
         )
