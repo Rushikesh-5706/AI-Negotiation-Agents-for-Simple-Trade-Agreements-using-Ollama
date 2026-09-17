@@ -41,7 +41,9 @@ class Negotiator:
 
         for attempt, wait in enumerate(backoff_seconds, start=1):
             try:
-                async with httpx.AsyncClient(timeout=120.0) as client:
+                async with httpx.AsyncClient(
+                    timeout=httpx.Timeout(connect=10.0, read=None, write=10.0, pool=10.0)
+                ) as client:
                     response = await client.post(url, json=payload)
                     response.raise_for_status()
                     data = response.json()
